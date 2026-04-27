@@ -16,13 +16,17 @@ wsl-setup/
 ├── install.sh              # orquestador — corre módulos
 ├── versions.conf           # ÚNICA fuente de verdad para versiones
 ├── modules/                # cada módulo = 1 herramienta
+│   ├── _lib.sh             # helpers compartidos (download_verified, etc.)
 │   ├── base.sh             # build-essential, curl, git, libssl-dev, ...
 │   ├── aliases.sh          # alias + funciones en ~/.bashrc
 │   ├── bun.sh              # Bun runtime JS
 │   ├── claude-code.sh      # Claude Code CLI
+│   ├── ffmpeg.sh           # ffmpeg (apt)
 │   ├── gh.sh               # GitHub CLI
 │   ├── git-cliff.sh        # changelog generator
+│   ├── git-flow.sh         # git-flow branching model
 │   ├── gitkraken.sh        # GitKraken .deb
+│   ├── gum.sh              # Charm gum CLI
 │   ├── mkcert.sh           # HTTPS local con CA propia
 │   ├── nvm.sh              # NVM + Node LTS
 │   ├── ohmyposh.sh         # prompt (theme iterm2)
@@ -31,7 +35,10 @@ wsl-setup/
 │   ├── rust.sh             # rustup + toolchain fijado
 │   ├── sdkman.sh           # SDKMAN + Java Temurin LTS
 │   ├── sqlite.sh           # sqlite3 + libsqlite3-dev
+│   ├── ssh-key.sh          # genera ed25519 si no existe
 │   └── uv.sh               # uv + Python 3.12
+├── tests/
+│   └── smoke.sh            # smoke tests (flags + sintaxis módulos)
 └── README.md
 ```
 
@@ -108,13 +115,17 @@ Reejecuta solo los módulos cambiados:
 | `uv` | uv + Python | `$UV_VERSION` / `$UV_PYTHON_VERSION` | astral.sh |
 | `sdkman` | SDKMAN + Java Temurin | `$JAVA_VERSION` | get.sdkman.io |
 | `sqlite` | sqlite3 + dev headers | apt | Ubuntu repos |
+| `mkcert` | HTTPS local | `$MKCERT_VERSION` | GitHub releases |
+| `gum` | Charm gum CLI | `$GUM_VERSION` | GitHub releases (.deb) |
 | `git-cliff` | changelog generator | `$GIT_CLIFF_VERSION` | GitHub releases |
+| `git-flow` | git-flow branching | apt | Ubuntu repos |
+| `ffmpeg` | ffmpeg | apt | Ubuntu repos |
 | `gh` | GitHub CLI | latest | repo oficial |
+| `ohmyposh` | Prompt | latest | ohmyposh.dev |
+| `ssh-key` | clave ed25519 (si no existe) | — | ssh-keygen |
+| `claude-code` | Claude Code CLI | latest | claude.ai/install.sh |
 | `gitkraken` | GitKraken GUI | latest active | api.gitkraken.com |
 | `pencil` | Pencil design tool | latest | pencil.dev AppImage |
-| `mkcert` | HTTPS local | `$MKCERT_VERSION` | GitHub releases |
-| `ohmyposh` | Prompt | latest | ohmyposh.dev |
-| `claude-code` | Claude Code CLI | latest | claude.ai/install.sh |
 | `aliases` | Alias + funciones shell | — | inline |
 
 ## Alias y funciones (módulo `aliases`)
@@ -164,7 +175,7 @@ pencil-update       # descarga AppImage, extrae, reemplaza
 
 ```bash
 bash tests/smoke.sh    # verifica flags y sintaxis de módulos
-shellcheck install.sh modules/*.sh   # lint
+shellcheck --severity=warning install.sh modules/*.sh tests/*.sh   # lint
 ```
 
 CI corre ambos en `.github/workflows/lint.yml`.
