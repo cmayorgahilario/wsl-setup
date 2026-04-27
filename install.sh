@@ -126,7 +126,8 @@ load_config() {
 
 setup_logging() {
     mkdir -p "$LOG_DIR"
-    local log_file="$LOG_DIR/install-$(date +%Y%m%d-%H%M%S).log"
+    local log_file
+    log_file="$LOG_DIR/install-$(date +%Y%m%d-%H%M%S).log"
     exec > >(tee -a "$log_file") 2>&1
     log "log: $log_file"
 }
@@ -213,9 +214,9 @@ run_module() {
 shell_hint() {
     local rc
     case "$(basename "${SHELL:-bash}")" in
-        zsh)  rc="~/.zshrc" ;;
-        fish) rc="~/.config/fish/config.fish" ;;
-        *)    rc="~/.bashrc" ;;
+        zsh)  rc="$HOME/.zshrc" ;;
+        fish) rc="$HOME/.config/fish/config.fish" ;;
+        *)    rc="$HOME/.bashrc" ;;
     esac
     warn "reinicia la shell (o: source $rc) para cargar los PATH nuevos"
 }
