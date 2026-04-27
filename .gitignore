@@ -1,0 +1,31 @@
+# Estado runtime del orquestador
+.installed/
+.logs/
+*.log
+
+# Backups del modo caveman:compress
+*.original.md
+
+# Descargas temporales de módulos
+*.deb
+*.AppImage
+*.tar.gz
+*.tar.xz
+*.zip
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Secretos / overrides locales
+versions.local.conf
+.env
+.env.*
+!.env.example
